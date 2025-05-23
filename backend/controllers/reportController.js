@@ -7,7 +7,7 @@ exports.createReport = async (req, res) => {
   const teamLeaderId = req.user.id;
   // from auth middleware
 
-  console.log('Team Leader ID:', teamLeaderId);  // Debugging step
+  // console.log('Team Leader ID:', teamLeaderId);  // Debugging step
 
   try {
     const project = await Project.findById(projectId);

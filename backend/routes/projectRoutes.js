@@ -33,12 +33,13 @@ const {
   getProjectsForEmployee,
   getProjectsForTeamLeader,
   updateProjectStatus,
+  getAllUsers,
 } = require('../controllers/projectController');
 const { assignEmployeesToProject } = require('../controllers/teamleaderController');
 const { authenticateToken } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
-
+router.get('/users', getAllUsers);
 router.get('/teamLeader', getTeamLeader);
 router.get('/employee', getAllEmployee);
 router.post('/', createProject);

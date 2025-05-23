@@ -134,7 +134,7 @@ const CancelPage = () => {
             ) : (
               <TableRow>
                 <TableCell colSpan={5} align="center">
-                  No pending projects found
+                  No canceled projects found
                 </TableCell>
               </TableRow>
             )}

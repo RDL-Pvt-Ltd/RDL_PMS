@@ -23,6 +23,9 @@ import {
   Work as WorkIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { addUser } from "../api/api";
 
 const Register = () => {
@@ -86,7 +89,15 @@ const Register = () => {
       }
 
       await addUser(userData);
-      alert("Employee added successfully!");
+      toast.success("Employee added successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
       setEmployee({
         name: "",
         email: "",
@@ -97,7 +108,9 @@ const Register = () => {
       });
       setErrors({});
       setServerError("");
+      setTimeout(() => {
       navigate("/addashboard");
+      }, 2000);
     } catch (error) {
       setServerError(error.response?.data?.message || "Failed. Try again.");
     }
@@ -283,6 +296,7 @@ const Register = () => {
           </CardContent>
         </Card>
       </Container>
+      <ToastContainer />
     </Box>
   );
 };

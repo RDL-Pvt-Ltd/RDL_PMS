@@ -147,6 +147,16 @@ exports.getTeamLeader = async (req, res) => {
   }
 };
 
+//get all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({ role: { $in: ['employee', 'teamleader'] } });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch users' });
+  }
+};
+
 // ✅ Create a new project and notify the assigned team leader
 exports.createProject = async (req, res) => {
   try {

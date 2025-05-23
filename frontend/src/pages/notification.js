@@ -217,7 +217,7 @@ const NotificationsPage = () => {
     const fetchNotifications = async () => {
       const userId = localStorage.getItem("userId");
       if (!userId) {
-        console.error("❌ No userId in localStorage");
+        console.error(" No userId in localStorage");
         return;
       }
 
@@ -228,10 +228,10 @@ const NotificationsPage = () => {
         } else if (response && Array.isArray(response.notifications)) {
           setNotifications(response.notifications);
         } else {
-          console.warn("⚠️ Unexpected response format:", response);
+          console.warn(" Unexpected response format:", response);
         }
       } catch (error) {
-        console.error("❌ Error fetching notifications:", error);
+        console.error(" Error fetching notifications:", error);
       }
     };
 
@@ -285,10 +285,10 @@ const NotificationsPage = () => {
 
         navigate(`/projectdetails/${notif.projectId}`);
       } else {
-        console.error("❌ Unknown role or notification already clicked:", role);
+        console.error(" Unknown role or notification already clicked:", role);
       }
     } catch (error) {
-      console.error("❌ Error handling notification click:", error);
+      console.error(" Error handling notification click:", error);
     }
   };
 

@@ -171,6 +171,7 @@ import TLprojectDetails from "./pages/TLprojectDetails";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import ProjectReport from "./pages/Report";
 import ProjectList from "./pages/projectList";
+import DeleteEmployee from "./pages/DeleteEmployee";
 
 // Route Protection Component
 const ProtectedRoute = ({ children, roleRequired }) => {
@@ -203,6 +204,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/delete" element={<DeleteEmployee />} />
 
         {/* Dashboard Redirect Based on Role */}
         <Route

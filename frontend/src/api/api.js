@@ -367,6 +367,17 @@ export const addUser = async (userData) => {
   }
 };
 
+//delete user
+export const deleteEmployeeById = async (id) => {
+  try {
+    const api = axiosInstance();
+    const response = await api.delete(`${API_URL}/users/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Failed to delete user" };
+  }
+};
+
 // ==============================
 // 🔹 NOTIFICATION APIs
 // ==============================
@@ -430,6 +441,18 @@ export const getProjectById = async (projectId) => {
     throw error.response?.data || { message: "Failed to fetch project details" };
   }
 };
+
+// Get all employees and team leaders
+export const getAllUsersForDeletion = async () => {
+  try {
+    const api = axiosInstance();
+    const response = await api.get(`${PROJECT_API_URL}/users`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Failed to fetch users" };
+  }
+};
+
 
 // 8. Assign Employees to Project
 export const assignEmployeesToProject = async (projectId, employeeIds) => {
