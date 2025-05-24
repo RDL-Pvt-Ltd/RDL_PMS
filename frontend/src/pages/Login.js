@@ -238,20 +238,6 @@ const Login = () => {
                       Login
                     </Button>
 
-                    <Typography textAlign="center" sx={{ mt: 2 }}>
-                      <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
-                        <Button
-                          sx={{ color: "#3f85f7", textTransform: "none", fontSize: "0.9rem" }}
-                          onClick={() => {
-                            setForgotPassword(true);
-                            setOtpSent(false);
-                            setOtpVerified(false);
-                          }}
-                        >
-                          Forgot Password?
-                        </Button>
-                      </Box>
-                    </Typography>
                   </>
                 )}
               </CardContent>

@@ -1,23 +1,31 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Typography, Box, Paper, Divider } from "@mui/material";
+import { fetchReportsByProject } from "../api/api"; // adjust path as needed
 
 const ProjectDetailsPage = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
+  const [reports, setReports] = useState([]);
 
   useEffect(() => {
-    const fetchProjectDetails = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/projects/${id}`);
-        setProject(res.data);
+        // Fetch project
+        const projectRes = await axios.get(`http://localhost:5000/api/projects/${id}`);
+        setProject(projectRes.data);
+
+        // Fetch reports via API helper
+        const reportsRes = await fetchReportsByProject(id);
+        setReports(reportsRes);
       } catch (error) {
-        console.error("Error fetching project:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchProjectDetails();
+    fetchData();
   }, [id]);
 
   if (!project) return <Typography>Loading project details...</Typography>;
@@ -28,42 +36,38 @@ const ProjectDetailsPage = () => {
         <Typography variant="h5" fontWeight="bold" gutterBottom>
           {project.projectName}
         </Typography>
+
         <Typography variant="subtitle1" gutterBottom>
           <strong>Team Lead:</strong> {project.teamLeader?.name || "N/A"}
         </Typography>
+
         <Typography variant="subtitle1" gutterBottom>
           <strong>Status:</strong> {project.status}
         </Typography>
-        <Divider sx={{ my: 2 }} />
-
-        {/* Team Lead Updates */}
-        <Typography variant="h6" gutterBottom>
-          🧑‍💼 Team Lead Updates
-        </Typography>
-        {project.teamLeadUpdates?.length > 0 ? (
-          project.teamLeadUpdates.map((update, index) => (
-            <Typography key={index} variant="body1" sx={{ mb: 1 }}>
-              • {update}
-            </Typography>
-          ))
-        ) : (
-          <Typography variant="body2">No updates from team lead.</Typography>
-        )}
 
         <Divider sx={{ my: 2 }} />
 
-        {/* Employee Updates */}
+        {/* Report Details */}
         <Typography variant="h6" gutterBottom>
-          👥 Employee Updates
+          📄 Report Details
         </Typography>
-        {project.employeeUpdates?.length > 0 ? (
-          project.employeeUpdates.map((update, index) => (
-            <Typography key={index} variant="body1" sx={{ mb: 1 }}>
-              • {update}
-            </Typography>
+
+        {reports.length > 0 ? (
+          reports.map((report, index) => (
+            <Box key={index} sx={{ mb: 2 }}>
+              <Typography variant="subtitle2" fontWeight="bold">
+                {report.teamLeader?.name || "Unknown Team Leader"}
+              </Typography>
+              <Typography variant="body2" sx={{ whiteSpace: "pre-line" }}>
+                {report.reportDetails}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {new Date(report.createdAt).toLocaleString()}
+              </Typography>
+            </Box>
           ))
         ) : (
-          <Typography variant="body2">No employee updates yet.</Typography>
+          <Typography variant="body2">No report details available.</Typography>
         )}
       </Paper>
     </Box>

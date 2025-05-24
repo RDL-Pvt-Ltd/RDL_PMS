@@ -26,3 +26,22 @@ exports.createReport = async (req, res) => {
     res.status(500).json({ message: "Server error while creating report" });
   }
 };
+
+
+//get report details
+
+exports.getReportsByProject = async (req, res) => {
+  try {
+    const projectId = req.params.projectId;
+
+    const reports = await Report.find({ project: projectId })
+      .populate("teamLeader", "name") // populate team leader's name
+      .sort({ createdAt: -1 }); // latest reports first
+
+    res.status(200).json(reports);
+  } catch (error) {
+    console.error("Error fetching reports:", error);
+    res.status(500).json({ error: "Failed to fetch reports" });
+  }
+};
+

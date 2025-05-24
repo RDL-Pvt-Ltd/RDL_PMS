@@ -182,6 +182,27 @@ export const updateProjectStatus = async (projectId, status) => {
   }
 };
 
+//update pending precentage
+export const updatePendingPercentage = async (projectId, pendingPercentage) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.put(
+      `${PROJECT_API_URL}/pending-percentage/${projectId}`,
+      { pendingPercentage },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error updating pending percentage:', error);
+    throw error;
+  }
+};
+
+
 
 export const createReport = async (projectId, reportDetails) => {
   try {
@@ -205,6 +226,25 @@ export const createReport = async (projectId, reportDetails) => {
   } catch (error) {
     // Handle error appropriately
     throw error.response?.data || { message: "Failed to submit project report" };
+  }
+};
+
+
+//fetch report
+export const fetchReportsByProject = async (projectId) => {
+  try {
+    const api = axiosInstance();
+    const token = localStorage.getItem("token");
+
+    const response = await api.get(`${REPORT_API_URL}/reports/project/${projectId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Failed to fetch report details" };
   }
 };
 

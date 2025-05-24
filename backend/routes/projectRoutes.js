@@ -34,6 +34,7 @@ const {
   getProjectsForTeamLeader,
   updateProjectStatus,
   getAllUsers,
+  updatePendingPercentage,
 } = require('../controllers/projectController');
 const { assignEmployeesToProject } = require('../controllers/teamleaderController');
 const { authenticateToken } = require("../middlewares/authMiddleware");
@@ -50,6 +51,5 @@ router.get('/:projectId', getProjectById);
 router.get("/employee/projects/:id", authenticateToken, getProjectsForEmployee);
 router.get("/teamleader/projects/:id", authenticateToken, getProjectsForTeamLeader);
 router.put('/status/:projectId', updateProjectStatus);
-
-
+router.put('/pending-percentage/:projectId', authenticateToken, updatePendingPercentage);
 module.exports = router;

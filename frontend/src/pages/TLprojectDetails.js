@@ -1,16 +1,29 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
-  Box, Typography, Button, Chip, MenuItem, Select, FormControl,
-  InputLabel, Divider, Paper, Grid, Avatar
+  Box,
+  Typography,
+  Paper,
+  Grid,
+  Button,
+  Divider,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  TextField,
 } from '@mui/material';
 import {
-  AssignmentOutlined, PeopleAltOutlined, PersonOutline, DescriptionOutlined,
-  FlagOutlined, GroupAdd, Done, Send
+  AssignmentIndOutlined,
+  DescriptionOutlined,
+  GroupAddOutlined,
+  FlagOutlined,
 } from '@mui/icons-material';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { getProjectById, updateProjectStatus } from '../api/api';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import { getProjectById, updateProjectStatus, updatePendingPercentage } from '../api/api';
 
 const TLprojectDetails = () => {
   const { projectId } = useParams();
@@ -23,6 +36,8 @@ const TLprojectDetails = () => {
   const [assignedEmployees, setAssignedEmployees] = useState([]);
   const [originalEmployees, setOriginalEmployees] = useState([]);
   const [status, setStatus] = useState('Pending');
+  const [originalStatus, setOriginalStatus] = useState('Pending');
+  const [pendingPercentage, setPendingPercentage] = useState(0);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -40,8 +55,10 @@ const TLprojectDetails = () => {
         setAssignedEmployees(updatedList);
         setOriginalEmployees(data.assignedEmployees || []);
         setStatus(data.status || 'Pending');
+        setOriginalStatus(data.status || 'Pending');
+        setPendingPercentage(data.pendingPercentage || 0);
       } catch (error) {
-        toast.error("Error fetching project data.");
+        toast.error('Error fetching project data.');
       }
     };
 
@@ -49,167 +66,167 @@ const TLprojectDetails = () => {
   }, [projectId, location.state]);
 
   const handleUpdateTeam = () => {
-    navigate("/assignemployees", {
+    navigate('/assignemployees', {
       state: {
         projectId,
         returnTo: `/teamleadproject/${projectId}`,
-        returnKey: "updatedEmployees",
+        returnKey: 'updatedEmployees',
       },
     });
   };
 
-  const handleStatusChange = async (e) => {
-    const newStatus = e.target.value;
-    setStatus(newStatus);
-    try {
-      const res = await updateProjectStatus(projectId, newStatus);
-      if (res.success || res.message === "Project status updated successfully") {
-        toast.success('Status updated successfully!');
-      } else {
-        toast.error('Failed to update status');
-      }
-    } catch {
-      toast.error('Error updating status');
-    }
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value);
   };
 
-  const handleDone = async () => {
-    const originalIds = originalEmployees.map(e => e._id);
-    const newEmployees = assignedEmployees.filter(emp => !originalIds.includes(emp._id));
-    if (newEmployees.length === 0) {
-      toast.info("No new employees selected.");
+  const handlePercentageChange = (e) => {
+    const value = Number(e.target.value);
+    setPendingPercentage(value);
+  };
+
+
+const handleDone = async () => {
+  let updateNeeded = false;
+
+  const originalIds = originalEmployees.map((e) => e._id);
+  const newEmployees = assignedEmployees.filter(
+    (emp) => !originalIds.includes(emp._id)
+  );
+
+  if (status !== originalStatus) {
+    updateNeeded = true;
+    try {
+      await updateProjectStatus(projectId, status);
+      if (status === 'Pending') {
+        await updatePendingPercentage(projectId, pendingPercentage);
+      }
+    } catch {
+      toast.error('Failed to update status or pending percentage');
       return;
     }
+  }
 
+  if (newEmployees.length > 0) {
+    updateNeeded = true;
     try {
-      const res = await fetch(`http://localhost:5000/api/projects/assign-employees/${projectId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ employeeIds: newEmployees.map(e => e._id) }),
-      });
+      const res = await fetch(
+        `http://localhost:5000/api/projects/assign-employees/${projectId}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ employeeIds: newEmployees.map((e) => e._id) }),
+        }
+      );
 
-      if (res.ok) {
-        toast.success("New employees assigned successfully!");
-      } else {
-        toast.error("Failed to assign employees");
+      if (!res.ok) {
+        toast.error('Failed to assign employees');
+        return;
       }
     } catch {
-      toast.error("Something went wrong");
+      toast.error('Something went wrong');
+      return;
     }
-  };
+  }
+
+  if (updateNeeded) {
+    toast.success('Project updated successfully!');
+    setTimeout(() => {
+      navigate('/tldashboard');
+    }, 1500);
+  } else {
+    toast.info('No changes were made.');
+  }
+};
+
 
   return (
     <Box sx={{ maxWidth: 900, mx: 'auto', my: 6 }}>
-      <Paper elevation={6} sx={{ borderRadius: 4, p: 4, background: '#f4f7fb' }}>
-        <Box
-          sx={{
-            mb: 4,
-            p: 2,
-            borderRadius: 2,
-            textAlign: 'center',
-            background: 'linear-gradient(90deg, #1976d2 0%, #42a5f5 100%)',
-            color: 'white',
-          }}
-        >
-          <Typography variant="h4" fontWeight="bold">
-            <AssignmentOutlined sx={{ verticalAlign: 'middle', mr: 1 }} />
-            Project Overview
-          </Typography>
-        </Box>
+      <Paper elevation={3} sx={{ p: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          <AssignmentIndOutlined sx={{ verticalAlign: 'middle', mr: 1 }} />
+          Project Details
+        </Typography>
+        <Divider sx={{ mb: 3 }} />
 
-        <Grid container spacing={4}>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              <AssignmentOutlined fontSize="small" sx={{ mr: 1 }} /> Project Name
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              <AssignmentIndOutlined sx={{ verticalAlign: 'middle', mr: 1 }} />
+              Project Name:
             </Typography>
-            <Typography variant="h6">{projectName}</Typography>
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              <PersonOutline fontSize="small" sx={{ mr: 1 }} /> Team Leader
-            </Typography>
-            <Typography variant="body1">{teamLeaderName}</Typography>
+            <Typography>{projectName}</Typography>
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              <DescriptionOutlined fontSize="small" sx={{ mr: 1 }} /> Description
+            <Typography variant="h6">
+              <DescriptionOutlined sx={{ verticalAlign: 'middle', mr: 1 }} />
+              Description:
             </Typography>
-            <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>{description}</Typography>
+            <Typography>{description}</Typography>
           </Grid>
+
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              <GroupAddOutlined sx={{ verticalAlign: 'middle', mr: 1 }} />
+              Team Leader:
+            </Typography>
+            <Typography>{teamLeaderName}</Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Typography variant="h6">Assigned Employees:</Typography>
+            <ul>
+              {assignedEmployees.map((emp) => (
+                <li key={emp._id}>
+                  {emp.name} - {emp.specificRole}
+                </li>
+              ))}
+            </ul>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleUpdateTeam}
+              sx={{ mr: 2 }}
+            >
+              Update Team Members
+            </Button>
+
+            <FormControl sx={{ minWidth: 200 }}>
+              <InputLabel>
+                <FlagOutlined sx={{ verticalAlign: 'middle', mr: 1 }} />
+                Status
+              </InputLabel>
+              <Select value={status} label="Status" onChange={handleStatusChange}>
+                <MenuItem value="Pending">Pending</MenuItem>
+                <MenuItem value="Complete">Complete</MenuItem>
+                <MenuItem value="Cancel">Cancel</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          {status === 'Pending' && (
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Pending Percentage"
+                type="number"
+                value={pendingPercentage}
+                onChange={handlePercentageChange}
+                inputProps={{ min: 0, max: 99 }}
+                fullWidth
+              />
+            </Grid>
+          )}
         </Grid>
 
-        <Divider sx={{ my: 4 }} />
+        <Divider sx={{ my: 3 }} />
 
-        <Typography variant="h6" sx={{ mb: 1, display: 'flex', alignItems: 'center' }}>
-          <PeopleAltOutlined sx={{ mr: 1, color: '#1976d2' }} /> Assigned Employees
-        </Typography>
-
-        {assignedEmployees.length > 0 ? (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {assignedEmployees.map((emp) => (
-              <Chip
-                key={emp._id}
-                avatar={<Avatar>{emp.name?.[0]}</Avatar>}
-                label={`${emp.name} • ${emp.specificRole || 'N/A'}`}
-                variant="outlined"
-                sx={{ backgroundColor: '#e3f2fd' }}
-              />
-            ))}
-          </Box>
-        ) : (
-          <Typography color="text.secondary" sx={{ mt: 1 }}>
-            No employees assigned yet.
-          </Typography>
-        )}
-
-        <Box sx={{ mt: 4, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            startIcon={<GroupAdd />}
-            onClick={handleUpdateTeam}
-          >
-            Update Team
-          </Button>
-          <Button
-            variant="contained"
-            color="success"
-            startIcon={<Done />}
-            onClick={handleDone}
-          >
-            Done
-          </Button>
-        </Box>
-
-        <Box sx={{ mt: 4 }}>
-          <FormControl fullWidth>
-            <InputLabel>
-              <FlagOutlined sx={{ verticalAlign: 'middle', mr: 1 }} /> Status
-            </InputLabel>
-            <Select value={status} label="Status" onChange={handleStatusChange}>
-              <MenuItem value="Pending">Pending</MenuItem>
-              <MenuItem value="Complete">Complete</MenuItem>
-              <MenuItem value="Cancel">Cancel</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-
-        <Box sx={{ textAlign: 'center', mt: 5 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            endIcon={<Send />}
-            size="large"
-            sx={{ px: 5 }}
-            onClick={() => navigate('/tldashboard')}
-          >
-            Submit
-          </Button>
-        </Box>
+        <Button variant="contained" color="success" onClick={handleDone}>
+          Done
+        </Button>
       </Paper>
-
       <ToastContainer />
     </Box>
   );
