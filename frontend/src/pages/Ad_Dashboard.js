@@ -90,7 +90,6 @@ const ProjectDashboard = () => {
 
     fetchStats();
 
-    // Delay rendering chart to trigger animation
     const timer = setTimeout(() => {
       setChartReady(true);
     }, 1000);

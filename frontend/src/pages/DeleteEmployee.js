@@ -12,7 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { getAllUsersForDeletion, deleteEmployeeById } from "../api/api"; // Ensure delete API exists
+import { getAllUsersForDeletion, deleteEmployeeById } from "../api/api"; 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,7 +21,7 @@ const DeleteEmployee = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isAnyDeleted, setIsAnyDeleted] = useState(false); // Track if any deletion happened
+  const [isAnyDeleted, setIsAnyDeleted] = useState(false); 
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -42,7 +42,7 @@ const DeleteEmployee = () => {
     try {
       await deleteEmployeeById(id);
       setEmployees((prev) => prev.filter((emp) => emp._id !== id));
-      setIsAnyDeleted(true); // Mark that deletion has occurred
+      setIsAnyDeleted(true); 
       toast.success("Employee deleted successfully!");
     } catch (err) {
       console.error("Error deleting employee:", err);

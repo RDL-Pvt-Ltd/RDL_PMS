@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -22,7 +24,7 @@ import { getProjectById } from '../api/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ProjectDetails = () => {
+const EmpProjectDetails = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
 
@@ -33,7 +35,7 @@ const ProjectDetails = () => {
   const [pendingPercentage, setPendingPercentage] = useState(0);
   const [status, setStatus] = useState('');
 
- useEffect(() => {
+  useEffect(() => {
   const fetchProject = async () => {
     try {
       const data = await getProjectById(projectId);
@@ -63,7 +65,7 @@ const ProjectDetails = () => {
 
 
   const handleDone = () => {
-    navigate('/projectlist');
+    navigate('/emdashboard');
   };
 
   const getProgressColor = () => {
@@ -205,4 +207,4 @@ const ProjectDetails = () => {
   );
 };
 
-export default ProjectDetails;
+export default EmpProjectDetails;

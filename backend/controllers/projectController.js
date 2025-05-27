@@ -4,7 +4,7 @@ const User = require("../models/userModel");
 const Project = require("../models/project");
 const Notification = require("../models/notification");
 
-// ✅ Get all employees
+//  Get all employees
 exports.getAllEmployee = async (req, res) => {
   try {
     const employee = await User.find({ role: 'employee' });
@@ -14,7 +14,7 @@ exports.getAllEmployee = async (req, res) => {
   }
 };
 
-// ✅ Get all team leaders
+//  Get all team leaders
 exports.getTeamLeader = async (req, res) => {
   try {
     const teamLead = await User.find({ role: 'teamleader' });
@@ -34,7 +34,7 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// ✅ Create a new project and notify the assigned team leader
+//  Create a new project and notify the assigned team leader
 exports.createProject = async (req, res) => {
   try {
     const { projectName, description, dueDate, teamLeader } = req.body;
@@ -46,7 +46,7 @@ exports.createProject = async (req, res) => {
     const newProject = new Project({
       projectName,
       description,
-      dueDate, // ⬅️ No conversion to Date object
+      dueDate, 
       teamLeader,
     });
 
@@ -63,12 +63,12 @@ exports.createProject = async (req, res) => {
       project: savedProject,
     });
   } catch (error) {
-    console.error("❌ Error creating project:", error);
+    console.error(" Error creating project:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// ✅ Get all projects
+//  Get all projects
 exports.getProjects = async (req, res) => {
   try {
     const projects = await Project.find();
@@ -79,7 +79,7 @@ exports.getProjects = async (req, res) => {
   }
 };
 
-// ✅ Get project by ID
+//  Get project by ID
 exports.getProjectById = async (req, res) => {
   try {
     const { projectId } = req.params;
@@ -94,7 +94,7 @@ exports.getProjectById = async (req, res) => {
 
     res.status(200).json(project);
   } catch (error) {
-    console.error("❌ Error fetching project:", error);
+    console.error(" Error fetching project:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -122,7 +122,7 @@ exports.getProjectsForTeamLeader = async (req, res) => {
 
 
  
-// ✅ Update Project Status
+//  Update Project Status
 exports.updateProjectStatus = async (req, res) => {
   try {
     const { projectId } = req.params;
@@ -147,7 +147,7 @@ exports.updateProjectStatus = async (req, res) => {
       project,
     });    
   } catch (error) {
-    console.error("❌ Error updating project status:", error);
+    console.error(" Error updating project status:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

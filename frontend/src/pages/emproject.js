@@ -45,7 +45,7 @@ const EmProject = () => {
     if (role === "teamleader") {
       navigate(`/teamleadproject/${projectId}`);
     } else {
-      navigate(`/projectdetails/${projectId}`);
+      navigate(`/employeeprojectdetails/${projectId}`);
     }
   };
 

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Button, Grid, Card, CardContent, Avatar, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { getTeamLeader } from "../api/api"; // Import the function
+import { getTeamLeader } from "../api/api"; 
 
 const Assign_Lead = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const Assign_Lead = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getTeamLeader(); // Use the API function
+        const data = await getTeamLeader(); 
         setTeamLeaders(data);
       } catch (err) {
         setError("Failed to fetch team leaders.");

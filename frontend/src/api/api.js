@@ -20,9 +20,7 @@ const axiosInstance = () => {
   });
 };
 
-// ==============================
-// 🔹 AUTH APIs
-// ==============================
+
 
 // 1. Login User
 export const loginUser = async (userData) => {
@@ -69,9 +67,7 @@ export const deleteEmployeeById = async (id) => {
   }
 };
 
-// ==============================
-// 🔹 NOTIFICATION APIs
-// ==============================
+
 
 // 3. Fetch Notifications
 export const getNotifications = async (userId) => {
@@ -96,9 +92,7 @@ export const handleMarkAsRead = async (notificationId) => {
   }
 };
 
-// ==============================
-// 🔹 PROJECT APIs
-// ==============================
+
 
 // 5. Fetch All Team Leaders
 export const getTeamLeader = async () => {
@@ -209,7 +203,7 @@ export const createReport = async (projectId, reportDetails) => {
     const api = axiosInstance();
 
     // Retrieve the token from local storage or another method you're using
-    const token = localStorage.getItem('token');  // Assuming the token is stored in localStorage
+    const token = localStorage.getItem('token');  
 
     // Send the request with the token in the Authorization header
     const response = await api.post(
@@ -217,7 +211,7 @@ export const createReport = async (projectId, reportDetails) => {
       { reportDetails }, 
       {
         headers: {
-          Authorization: `Bearer ${token}`  // Ensure the token is added to the headers
+          Authorization: `Bearer ${token}` 
         }
       }
     );
@@ -248,11 +242,6 @@ export const fetchReportsByProject = async (projectId) => {
   }
 };
 
-
-
-// ==============================
-// 🔹 EXTRA APIs (if needed)
-// ==============================
 
 // Fetch Team Leader Projects (duplicate avoided)
 export const fetchTeamLeaderProjects = getAssignedProjects;

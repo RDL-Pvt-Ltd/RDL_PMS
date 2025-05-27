@@ -33,7 +33,7 @@ const Navbar = () => {
   const [specificRole, setSpecificRole] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const [prevPath, setPrevPath] = useState(""); // <-- added
+  const [prevPath, setPrevPath] = useState(""); 
 
   const userId = localStorage.getItem("userId");
 
@@ -64,14 +64,13 @@ const Navbar = () => {
       fetchNotifications();
     }
 
-    // Check if user navigated away from /notifications
+    
     if (prevPath === "/notifications" && location.pathname !== "/notifications") {
       fetchNotifications();
     }
 
     setPrevPath(location.pathname);
-  }, [location.pathname]); // <-- updated this useEffect
-
+  }, [location.pathname]); 
   const fetchNotifications = async () => {
     try {
       const data = await getNotifications(userId);

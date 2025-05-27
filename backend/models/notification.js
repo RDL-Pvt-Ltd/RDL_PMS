@@ -17,7 +17,7 @@ const notificationSchema = new mongoose.Schema({
   },
   projectId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Project", // 👈 referencing the Project model
+    ref: "Project", //  referencing the Project model
     required: false, // optional: only some notifications are project-related
   },
   createdAt: {

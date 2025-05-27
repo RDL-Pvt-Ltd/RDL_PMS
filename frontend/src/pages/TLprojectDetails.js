@@ -93,7 +93,7 @@ const handleDone = async () => {
     (emp) => !originalIds.includes(emp._id)
   );
 
-  if (status !== originalStatus) {
+  if (status !== originalStatus || status === originalStatus) {
     updateNeeded = true;
     try {
       await updateProjectStatus(projectId, status);

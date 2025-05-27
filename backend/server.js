@@ -7,13 +7,13 @@ const projectRoutes = require('./routes/projectRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const complaintRoutes = require("./routes/complaintRoutes");
 const taskRoutes = require("./routes/task");
-const statsRoutes = require('./routes/stats'); // adjust path if needed
+const statsRoutes = require('./routes/stats'); 
 const reportRoutes = require('./routes/reportRoutes');
 
 
 
 
-const { initializeAdmin } = require('./controllers/authController'); // Import function
+const { initializeAdmin } = require('./controllers/authController');
 require('dotenv').config();
 
 const app = express();
