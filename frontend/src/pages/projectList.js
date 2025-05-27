@@ -179,7 +179,7 @@ const ProjectList = () => {
                             position="relative"
                             display="inline-flex"
                             sx={{ cursor: 'pointer' }}
-                            //onClick={() => navigate(`/projectdetails/${project._id}`)}
+                            onClick={() => navigate(`/projectdetails/${project._id}`)}
                           >
                             <CircularProgress
                               variant="determinate"
