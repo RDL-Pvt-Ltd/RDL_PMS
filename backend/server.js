@@ -23,16 +23,17 @@ connectDB();
 initializeAdmin();
 
 app.use(cors({
-  origin: "https://rdl-pms.vercel.app", // allow frontend
-  credentials: true, // allow cookies/auth headers if needed
+  origin: "https://rdl-pms.vercel.app",
+  credentials: true,
 }));
+
 
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/notifications', notificationRoutes);
-app.use('/api/tasks', require('./routes/tasks'));
+// app.use('/api/tasks', require('./routes/tasks'));
 app.use("/api/complaints", complaintRoutes);
 app.use("/api/tasks", taskRoutes);
 // Register routes
