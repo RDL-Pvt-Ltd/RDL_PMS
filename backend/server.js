@@ -23,9 +23,8 @@ connectDB();
 initializeAdmin();
 
 app.use(cors({
-    origin: "http://localhost:3000",
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true
+  origin: "https://rdl-pms.vercel.app", // allow frontend
+  credentials: true, // allow cookies/auth headers if needed
 }));
 
 app.use(express.json());
