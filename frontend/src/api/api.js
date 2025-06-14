@@ -1,19 +1,12 @@
-
-
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_API_URL;
-
-const API_URL = `${BASE_URL}/api/auth`;
-const PROJECT_API_URL = `${BASE_URL}/api/projects`;
-const NOTIFICATION_API_URL = `${BASE_URL}/api/notifications`;
-const REPORT_API_URL = `${BASE_URL}/api/report`;
-
+const API_URL = "http://localhost:5000/api/auth";
+const PROJECT_API_URL = "http://localhost:5000/api/projects";
+const NOTIFICATION_API_URL = "http://localhost:5000/api/notifications";
+const REPORT_API_URL = "http://localhost:5000/api/report";
 
 // Get auth token from localStorage
 const getAuthToken = () => localStorage.getItem("token");
-
-
 
 // Axios instance with token
 const axiosInstance = () => {
